@@ -1,0 +1,73 @@
+{
+ "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/setup.sh"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/cleanup.sh"
+    }
+],
+  "builders": [{
+    "type": "virtualbox-iso",
+    "boot_command": [
+      "<enter><f6><esc>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs>",
+      "<bs><bs><bs>",
+      "auto preseed/url=http://{{.HTTPIP}}:{{.HTTPPort}}/http/xenial-preseed.cfg ",
+      "debian-installer/allow_unauthenticated_ssl=true ",
+      "debian-installer=en_US locale=en_US kbd-chooser/method=us ",
+      "hostname=minimal-xenial ",
+      "fb=false debconf/frontend=noninteractive ",
+      "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+      "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+      "vga=788 initrd=/install/initrd.gz quiet --- ",
+      "<enter>"
+    ],
+    "boot_wait": "4s",
+    "guest_os_type": "Ubuntu_64",
+    "http_directory": "./",
+    "iso_checksum": "d2d939ca0e65816790375f6826e4032f",
+    "iso_checksum_type": "md5",
+    "iso_url": "http://releases.ubuntu.com/16.04.1/ubuntu-16.04.1-server-amd64.iso",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "keep_registered": "true",
+    "ssh_wait_timeout": "10000s",
+    "disk_size": "60000",
+    "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+    "shutdown_timeout": "7m",
+    "vboxmanage": [
+      [ "modifyvm", "{{.Name}}", "--memory", "1024" ],
+      [ "modifyvm", "{{.Name}}", "--cpus", "1" ],
+      [ "modifyvm", "{{.Name}}", "--audio", "none" ],
+      [ "modifyvm", "{{.Name}}", "--usb", "off" ]
+    ]
+  }],
+  "post-processors": [
+    {
+        "type": "vagrant",
+        "only": ["virtualbox-iso"],
+        "output": "minimal-xenial64.box",
+        "vagrantfile_template": "./Vagrantfile"
+    }
+  ]
+}
