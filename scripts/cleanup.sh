@@ -49,7 +49,7 @@ echo $(dpkg --list | grep linux-image | awk '{ print $2 }' | sort -V | sed -n '/
 sudo apt purge linux-header* -y
 
 sudo apt autoremove -y
-sudo apt install -y dialog wget dbus vim jq git curl psmisc lsof rng-tools
+sudo apt install -y dialog wget dbus vim jq git curl psmisc lsof rng-tools apt-transport-https
 sudo apt autoclean
 sudo apt clean
 
