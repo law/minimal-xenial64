@@ -65,6 +65,7 @@
   "post-processors": [
     {
         "type": "vagrant",
+        "compression_level": 9,
         "only": ["virtualbox-iso"],
         "output": "minimal-xenial64.box",
         "vagrantfile_template": "./Vagrantfile"
